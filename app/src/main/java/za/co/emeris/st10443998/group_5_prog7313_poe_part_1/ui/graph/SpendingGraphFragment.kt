@@ -35,7 +35,7 @@ class SpendingGraphFragment : Fragment() {
             BarEntry(0f, 320f),
             BarEntry(1f, 450f),
             BarEntry(2f, 280f),
-            BarEntry(3, 520f),
+            BarEntry(3f, 520f),
             BarEntry(4f, 390f),
             BarEntry(5f, 410f),
             BarEntry(6f, 245f)

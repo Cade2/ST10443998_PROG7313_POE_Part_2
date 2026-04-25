@@ -6,12 +6,12 @@ plugins {
 
 android {
     namespace = "za.co.emeris.st10443998.group_5_prog7313_poe_part_1"
-    compileSdk = 34
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "za.co.emeris.st10443998.group_5_prog7313_poe_part_1"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
