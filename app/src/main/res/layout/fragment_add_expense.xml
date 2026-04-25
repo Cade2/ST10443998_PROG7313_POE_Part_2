@@ -175,6 +175,16 @@
                 app:iconGravity="textStart"
                 android:layout_marginBottom="@dimen/spacing_md" />
 
+            <!-- Photo thumbnail — hidden until a photo is selected -->
+            <ImageView
+                android:id="@+id/iv_photo_thumbnail"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginBottom="@dimen/spacing_md"
+                android:scaleType="centerCrop"
+                android:contentDescription="Attached photo thumbnail"
+                android:visibility="gone" />
+
             <!-- Recurring toggle -->
             <LinearLayout
                 android:layout_width="match_parent"

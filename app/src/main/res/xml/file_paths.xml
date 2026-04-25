@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!--
+        Grants FileProvider access to files in getExternalFilesDir("Pictures").
+        Used when passing camera capture URIs to the system camera app.
+    -->
+    <external-files-path
+        name="photos"
+        path="Pictures/" />
+</paths>
