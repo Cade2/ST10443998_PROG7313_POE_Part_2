@@ -1,13 +1,14 @@
 package za.co.emeris.st10443998.group_5_prog7313_poe_part_1.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.databinding.ItemCategoryProgressBinding
 import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.model.CategoryProgress
 
 class CategoryProgressAdapter(
-    private val items: List<CategoryProgress>
+    private var items: List<CategoryProgress>
 ) : RecyclerView.Adapter<CategoryProgressAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: ItemCategoryProgressBinding) :
@@ -26,12 +27,22 @@ class CategoryProgressAdapter(
             tvCategoryName.text = item.name
             viewCategoryDot.backgroundTintList =
                 android.content.res.ColorStateList.valueOf(item.color)
-            pbCategory.progress = item.progressPercent
-            pbCategory.progressTintList =
-                android.content.res.ColorStateList.valueOf(item.color)
+            if (item.budget > 0) {
+                pbCategory.visibility = View.VISIBLE
+                pbCategory.progress = item.progressPercent
+                pbCategory.progressTintList =
+                    android.content.res.ColorStateList.valueOf(item.color)
+            } else {
+                pbCategory.visibility = View.GONE
+            }
             tvAmount.text = item.displayText
         }
     }
 
     override fun getItemCount(): Int = items.size
+
+    fun updateItems(newItems: List<CategoryProgress>) {
+        items = newItems
+        notifyDataSetChanged()
+    }
 }

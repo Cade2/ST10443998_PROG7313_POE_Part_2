@@ -104,6 +104,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:nestedScrollingEnabled="false"
+                android:layout_marginBottom="@dimen/spacing_md" />
+
+            <!-- Category Totals header -->
+            <TextView
+                android:id="@+id/tv_category_totals_header"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Category Totals"
+                android:textSize="@dimen/text_body"
+                android:textStyle="bold"
+                android:textColor="@color/colorOnSurface"
+                android:layout_marginBottom="@dimen/spacing_sm" />
+
+            <!-- Per-category spend totals for the selected period -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_category_totals"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
                 android:layout_marginBottom="@dimen/spacing_xl" />
 
         </LinearLayout>

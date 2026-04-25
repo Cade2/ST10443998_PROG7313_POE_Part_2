@@ -16,11 +16,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.R
+import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.adapters.CategoryProgressAdapter
 import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.adapters.ExpenseAdapter
 import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.data.entity.CategoryEntity
 import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.data.entity.ExpenseEntity
 import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.data.repository.StashRepository
 import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.databinding.FragmentExpensesBinding
+import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.model.CategoryProgress
 import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.model.Expense
 import java.io.File
 import java.util.Calendar
@@ -31,13 +33,18 @@ class ExpensesFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var viewModel: ExpensesViewModel
-    private lateinit var adapter: ExpenseAdapter
+    private lateinit var expenseAdapter: ExpenseAdapter
+    private lateinit var totalsAdapter: CategoryProgressAdapter
 
     private var categoryMap: Map<Int, CategoryEntity> = emptyMap()
     private var currentEntities: List<ExpenseEntity> = emptyList()
 
-    private var currentLiveData: LiveData<List<ExpenseEntity>>? = null
-    private var currentObserver: Observer<List<ExpenseEntity>>? = null
+    // Tracked LiveData + observer pairs so old observers are removed before re-subscribing.
+    private var currentExpenseLiveData: LiveData<List<ExpenseEntity>>? = null
+    private var currentExpenseObserver: Observer<List<ExpenseEntity>>? = null
+
+    private var currentTotalsLiveData: LiveData<List<CategoryProgress>>? = null
+    private var currentTotalsObserver: Observer<List<CategoryProgress>>? = null
 
     private var userId = -1
 
@@ -59,20 +66,27 @@ class ExpensesFragment : Fragment() {
         val repository = StashRepository.getInstance(requireContext())
         viewModel = ViewModelProvider(this, ExpensesViewModel.Factory(repository))[ExpensesViewModel::class.java]
 
-        adapter = ExpenseAdapter(emptyList()) { expense ->
-            showExpenseDetail(expense)
-        }
+        expenseAdapter = ExpenseAdapter(emptyList()) { expense -> showExpenseDetail(expense) }
         binding.rvExpenses.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            adapter = this@ExpensesFragment.adapter
+            adapter = expenseAdapter
             isNestedScrollingEnabled = false
         }
 
-        viewModel.getCategoriesForUser(userId).observe(viewLifecycleOwner) { cats ->
-            categoryMap = cats.associateBy { it.id }
-            rebuildDisplay()
+        totalsAdapter = CategoryProgressAdapter(emptyList())
+        binding.rvCategoryTotals.apply {
+            layoutManager = LinearLayoutManager(requireContext())
+            adapter = totalsAdapter
+            isNestedScrollingEnabled = false
         }
 
+        // Category map is shared by both the expense list and the totals computation.
+        viewModel.getCategoriesForUser(userId).observe(viewLifecycleOwner) { cats ->
+            categoryMap = cats.associateBy { it.id }
+            rebuildExpenseDisplay()
+        }
+
+        // Start with all expenses and all-time totals.
         observeAllExpenses()
 
         binding.etStartDate.setOnClickListener { pickDate { date -> binding.etStartDate.setText(date); applyFilter() } }
@@ -105,26 +119,39 @@ class ExpensesFragment : Fragment() {
         }
     }
 
+    // "All time" uses a span wide enough to capture every possible date stored as yyyy-MM-dd.
     private fun observeAllExpenses() {
-        swapObserver(viewModel.getAllExpenses(userId))
+        swapExpenseObserver(viewModel.getAllExpenses(userId))
+        swapTotalsObserver(viewModel.getCategoryTotalsForPeriod(userId, "0001-01-01", "9999-12-31"))
     }
 
     private fun observeFiltered(start: String, end: String) {
-        swapObserver(viewModel.getExpensesByDateRange(userId, start, end))
+        swapExpenseObserver(viewModel.getExpensesByDateRange(userId, start, end))
+        swapTotalsObserver(viewModel.getCategoryTotalsForPeriod(userId, start, end))
     }
 
-    private fun swapObserver(newLiveData: LiveData<List<ExpenseEntity>>) {
-        currentObserver?.let { currentLiveData?.removeObserver(it) }
+    private fun swapExpenseObserver(newLiveData: LiveData<List<ExpenseEntity>>) {
+        currentExpenseObserver?.let { currentExpenseLiveData?.removeObserver(it) }
         val observer = Observer<List<ExpenseEntity>> { entities ->
             currentEntities = entities ?: emptyList()
-            rebuildDisplay()
+            rebuildExpenseDisplay()
         }
-        currentObserver = observer
-        currentLiveData = newLiveData
+        currentExpenseObserver = observer
+        currentExpenseLiveData = newLiveData
         newLiveData.observe(viewLifecycleOwner, observer)
     }
 
-    private fun rebuildDisplay() {
+    private fun swapTotalsObserver(newLiveData: LiveData<List<CategoryProgress>>) {
+        currentTotalsObserver?.let { currentTotalsLiveData?.removeObserver(it) }
+        val observer = Observer<List<CategoryProgress>> { totals ->
+            totalsAdapter.updateItems(totals ?: emptyList())
+        }
+        currentTotalsObserver = observer
+        currentTotalsLiveData = newLiveData
+        newLiveData.observe(viewLifecycleOwner, observer)
+    }
+
+    private fun rebuildExpenseDisplay() {
         val expenses = currentEntities.map { entity ->
             val cat = categoryMap[entity.categoryId]
             Expense(
@@ -139,7 +166,7 @@ class ExpensesFragment : Fragment() {
                 hasPhoto = entity.photoPath != null
             )
         }
-        adapter.updateExpenses(expenses)
+        expenseAdapter.updateExpenses(expenses)
     }
 
     private fun showExpenseDetail(expense: Expense) {

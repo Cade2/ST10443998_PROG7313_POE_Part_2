@@ -7,5 +7,9 @@ data class CategoryProgress(
     val budget: Double
 ) {
     val progressPercent: Int get() = if (budget > 0) ((spent / budget) * 100).toInt().coerceIn(0, 100) else 0
-    val displayText: String get() = "R%.0f / R%.0f".format(spent, budget)
+    val displayText: String get() = if (budget > 0) {
+        "R%.0f / R%.0f".format(spent, budget)
+    } else {
+        java.lang.String.format(java.util.Locale.US, "R%,.2f", spent)
+    }
 }
