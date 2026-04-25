@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/spacing_sm"
+    app:cardBackgroundColor="@color/colorSurface"
+    app:cardCornerRadius="@dimen/card_corner_radius_sm"
+    app:cardElevation="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="@dimen/spacing_md">
+
+        <!-- Category colour dot -->
+        <View
+            android:id="@+id/view_category_dot"
+            android:layout_width="@dimen/category_dot_size"
+            android:layout_height="@dimen/category_dot_size"
+            android:background="@drawable/bg_circle" />
+
+        <!-- Category name -->
+        <TextView
+            android:id="@+id/tv_category_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Groceries"
+            android:textColor="@color/colorOnSurface"
+            android:textSize="@dimen/text_md"
+            android:layout_marginStart="@dimen/spacing_sm" />
+
+        <!-- Min goal field -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_min"
+            style="@style/StashTextInput"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:hint="Min"
+            android:layout_marginEnd="@dimen/spacing_xs">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_min"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:textSize="@dimen/text_sm" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Max goal field -->
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_max"
+            style="@style/StashTextInput"
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:hint="Max"
+            android:layout_marginStart="@dimen/spacing_xs">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/et_max"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="numberDecimal"
+                android:textSize="@dimen/text_sm" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

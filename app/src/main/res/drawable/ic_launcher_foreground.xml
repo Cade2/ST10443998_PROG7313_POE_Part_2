@@ -1,0 +1,25 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Dark navy circle background -->
+    <path
+        android:fillColor="#1B2A4A"
+        android:pathData="M54,54m-40,0a40,40 0 1,0 80,0a40,40 0 1,0 -80,0" />
+    <!-- Gold upward trend line graphic -->
+    <path
+        android:strokeColor="#C9982A"
+        android:strokeWidth="3.5"
+        android:fillColor="#00000000"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M26,72 L38,60 L48,65 L62,48 L72,52 L84,36" />
+    <!-- Gold dots at key points -->
+    <path
+        android:fillColor="#C9982A"
+        android:pathData="M26,72m-3,0a3,3 0 1,0 6,0a3,3 0 1,0 -6,0" />
+    <path
+        android:fillColor="#C9982A"
+        android:pathData="M84,36m-3,0a3,3 0 1,0 6,0a3,3 0 1,0 -6,0" />
+</vector>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Stash Brand Colors -->
+    <color name="colorPrimary">#1B2A4A</color>
+    <color name="colorAccent">#C9982A</color>
+    <color name="colorBackground">#B8D8D8</color>
+    <color name="colorSurface">#FFFFFF</color>
+    <color name="colorOnPrimary">#FFFFFF</color>
+    <color name="colorOnSurface">#1B2A4A</color>
+    <color name="colorError">#B00020</color>
+    <color name="colorSuccess">#2E7D32</color>
+    <color name="colorWarning">#F57C00</color>
+
+    <!-- App Background -->
+    <color name="colorAppBackground">#F4F9F9</color>
+
+    <!-- Category Colors -->
+    <color name="categoryGroceries">#2E7D32</color>
+    <color name="categoryTransport">#1565C0</color>
+    <color name="categoryEntertainment">#6A1B9A</color>
+    <color name="categoryUtilities">#E65100</color>
+    <color name="categoryDining">#C62828</color>
+
+    <!-- Misc -->
+    <color name="colorDivider">#E0E0E0</color>
+    <color name="colorTextHint">#9E9E9E</color>
+    <color name="colorTextSecondary">#616161</color>
+    <color name="colorBadgeLocked">#BDBDBD</color>
+    <color name="colorPrimaryLight">#2E4070</color>
+    <color name="colorAccentLight">#E0B23A</color>
+</resources>

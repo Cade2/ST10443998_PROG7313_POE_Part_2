@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/dashboardFragment">
+
+    <fragment
+        android:id="@+id/dashboardFragment"
+        android:name="za.co.emeris.st10443998.group_5_prog7313_poe_part_1.ui.dashboard.DashboardFragment"
+        android:label="@string/nav_dashboard"
+        tools:layout="@layout/fragment_dashboard">
+        <action
+            android:id="@+id/action_dashboard_to_addExpense"
+            app:destination="@id/addExpenseFragment" />
+        <action
+            android:id="@+id/action_dashboard_to_settings"
+            app:destination="@id/settingsFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/expensesFragment"
+        android:name="za.co.emeris.st10443998.group_5_prog7313_poe_part_1.ui.expenses.ExpensesFragment"
+        android:label="@string/nav_expenses"
+        tools:layout="@layout/fragment_expenses">
+        <action
+            android:id="@+id/action_expenses_to_addExpense"
+            app:destination="@id/addExpenseFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/budgetGoalsFragment"
+        android:name="za.co.emeris.st10443998.group_5_prog7313_poe_part_1.ui.budget.BudgetGoalsFragment"
+        android:label="@string/nav_budget"
+        tools:layout="@layout/fragment_budget_goals">
+        <action
+            android:id="@+id/action_budget_to_categories"
+            app:destination="@id/categoriesFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/spendingGraphFragment"
+        android:name="za.co.emeris.st10443998.group_5_prog7313_poe_part_1.ui.graph.SpendingGraphFragment"
+        android:label="@string/nav_graph"
+        tools:layout="@layout/fragment_spending_graph" />
+
+    <fragment
+        android:id="@+id/achievementsFragment"
+        android:name="za.co.emeris.st10443998.group_5_prog7313_poe_part_1.ui.achievements.AchievementsFragment"
+        android:label="@string/nav_achievements"
+        tools:layout="@layout/fragment_achievements" />
+
+    <fragment
+        android:id="@+id/addExpenseFragment"
+        android:name="za.co.emeris.st10443998.group_5_prog7313_poe_part_1.ui.expenses.AddExpenseFragment"
+        android:label="@string/title_add_expense"
+        tools:layout="@layout/fragment_add_expense" />
+
+    <fragment
+        android:id="@+id/categoriesFragment"
+        android:name="za.co.emeris.st10443998.group_5_prog7313_poe_part_1.ui.budget.CategoriesFragment"
+        android:label="@string/title_categories"
+        tools:layout="@layout/fragment_categories" />
+
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="za.co.emeris.st10443998.group_5_prog7313_poe_part_1.ui.settings.SettingsFragment"
+        android:label="@string/title_settings"
+        tools:layout="@layout/fragment_settings" />
+
+</navigation>

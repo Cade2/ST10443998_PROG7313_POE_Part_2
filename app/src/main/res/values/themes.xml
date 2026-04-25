@@ -1,0 +1,78 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.Group_5_PROG7313_POE_Part_1" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryVariant">@color/colorPrimaryLight</item>
+        <item name="colorOnPrimary">@color/colorOnPrimary</item>
+        <item name="colorSecondary">@color/colorAccent</item>
+        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
+        <item name="colorError">@color/colorError</item>
+        <item name="android:colorBackground">@color/colorAppBackground</item>
+        <item name="materialAlertDialogTheme">@style/StashAlertDialog</item>
+    </style>
+
+    <style name="Theme.Group_5_PROG7313_POE_Part_1" parent="Base.Theme.Group_5_PROG7313_POE_Part_1" />
+
+    <!-- Auth theme (same but used for login/register) -->
+    <style name="Theme.Stash.Auth" parent="Base.Theme.Group_5_PROG7313_POE_Part_1" />
+
+    <!-- Toolbar style -->
+    <style name="StashToolbar" parent="Widget.AppCompat.Toolbar">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="titleTextColor">@color/white</item>
+        <item name="navigationIconTint">@color/white</item>
+    </style>
+
+    <!-- Card style -->
+    <style name="StashCard" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardBackgroundColor">@color/colorSurface</item>
+        <item name="cardCornerRadius">@dimen/card_corner_radius</item>
+        <item name="cardElevation">2dp</item>
+    </style>
+
+    <!-- Primary Button style -->
+    <style name="StashButton.Primary" parent="Widget.Material3.Button">
+        <item name="android:backgroundTint">@color/colorPrimary</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:minHeight">@dimen/button_height</item>
+        <item name="cornerRadius">8dp</item>
+    </style>
+
+    <!-- Outlined Button style -->
+    <style name="StashButton.Outlined" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="strokeColor">@color/colorPrimary</item>
+        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:minHeight">@dimen/button_height</item>
+        <item name="cornerRadius">8dp</item>
+    </style>
+
+    <!-- Text Button -->
+    <style name="StashButton.Text" parent="Widget.Material3.Button.TextButton">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
+    <!-- FAB style -->
+    <style name="StashFAB" parent="Widget.Material3.FloatingActionButton.Primary">
+        <item name="backgroundTint">@color/colorAccent</item>
+        <item name="tint">@color/white</item>
+    </style>
+
+    <!-- Alert Dialog -->
+    <style name="StashAlertDialog" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="buttonBarPositiveButtonStyle">@style/StashButton.Primary</item>
+    </style>
+
+    <!-- TextInputLayout outlined style -->
+    <style name="StashTextInput" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxStrokeColor">@color/colorPrimary</item>
+        <item name="hintTextColor">@color/colorPrimary</item>
+    </style>
+
+    <!-- TextInputLayout dropdown style -->
+    <style name="StashTextInput.ExposedDropdown" parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="boxStrokeColor">@color/colorPrimary</item>
+        <item name="hintTextColor">@color/colorPrimary</item>
+    </style>
+</resources>
