@@ -1,0 +1,61 @@
+name: Android CI
+
+# Trigger this workflow on every push to main and on every pull request targeting main.
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Check out the repository so the runner has access to the source code.
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Install JDK 17 using the Temurin distribution (Eclipse Adoptium).
+      # The 'cache: gradle' option tells setup-java to cache the Gradle home directory.
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: gradle
+
+      # Step 3: Ensure the Gradle wrapper script is executable on Linux runners.
+      # Git does not always preserve the execute bit when cloning on Windows/Mac.
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      # Step 4: Cache the Gradle dependency cache and wrapper distributions.
+      # The cache key changes whenever any *.gradle* file or the wrapper properties change,
+      # ensuring a fresh cache after any dependency update.
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      # Step 5: Run the JVM unit tests (src/test). Instrumented tests (src/androidTest)
+      # require a connected device or emulator and are run separately.
+      - name: Run unit tests
+        run: ./gradlew test
+
+      # Step 6: Compile and package the debug variant of the APK.
+      - name: Build debug APK
+        run: ./gradlew assembleDebug
+
+      # Step 7: Upload the compiled APK as a workflow artifact so it can be downloaded
+      # from the Actions run summary without needing to rebuild locally.
+      - name: Upload APK artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: stash-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk
