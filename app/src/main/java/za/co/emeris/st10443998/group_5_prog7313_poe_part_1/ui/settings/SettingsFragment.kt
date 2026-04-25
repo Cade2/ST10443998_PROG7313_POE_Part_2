@@ -1,7 +1,9 @@
 package za.co.emeris.st10443998.group_5_prog7313_poe_part_1.ui.settings
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -49,9 +51,17 @@ class SettingsFragment : Fragment() {
         }
 
         binding.btnLogout.setOnClickListener {
+            Log.d("StashAuth", "SettingsFragment: logging out, clearing session")
+            requireContext()
+                .getSharedPreferences("stash_prefs", Context.MODE_PRIVATE)
+                .edit()
+                .clear()
+                .apply()
+            Log.d("StashAuth", "SettingsFragment: prefs cleared, navigating to AuthActivity")
             val intent = Intent(requireContext(), AuthActivity::class.java)
             intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             startActivity(intent)
+            requireActivity().finish()
         }
     }
 
