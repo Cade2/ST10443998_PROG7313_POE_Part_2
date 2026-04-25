@@ -84,6 +84,7 @@
                     android:padding="@dimen/spacing_md">
 
                     <TextView
+                        android:id="@+id/tv_motivational_title"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="You're on track this month!"
@@ -92,6 +93,7 @@
                         android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tv_motivational_subtitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Keep up the great saving habits."

@@ -8,7 +8,8 @@ import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.databinding.ItemExpen
 import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.model.Expense
 
 class ExpenseAdapter(
-    private val items: List<Expense>
+    private var items: List<Expense>,
+    private val onItemClick: ((Expense) -> Unit)? = null
 ) : RecyclerView.Adapter<ExpenseAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: ItemExpenseBinding) :
@@ -31,8 +32,14 @@ class ExpenseAdapter(
             viewCategoryBorder.backgroundTintList =
                 android.content.res.ColorStateList.valueOf(item.categoryColor)
             ivPhotoIndicator.visibility = if (item.hasPhoto) View.VISIBLE else View.GONE
+            root.setOnClickListener { onItemClick?.invoke(item) }
         }
     }
 
     override fun getItemCount(): Int = items.size
+
+    fun updateExpenses(newItems: List<Expense>) {
+        items = newItems
+        notifyDataSetChanged()
+    }
 }

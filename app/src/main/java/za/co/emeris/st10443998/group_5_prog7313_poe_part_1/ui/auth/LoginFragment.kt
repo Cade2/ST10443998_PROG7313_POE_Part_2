@@ -54,6 +54,7 @@ class LoginFragment : Fragment() {
                             .getSharedPreferences("stash_prefs", Context.MODE_PRIVATE)
                             .edit()
                             .putInt("userId", user.id)
+                            .putString("username", user.username)
                             .apply()
                         startActivity(Intent(requireContext(), MainActivity::class.java))
                         requireActivity().finish()

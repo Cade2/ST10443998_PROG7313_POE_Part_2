@@ -7,8 +7,9 @@ import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.databinding.ItemCateg
 import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.model.Category
 
 class CategoryAdapter(
-    private val items: List<Category>,
-    private val onEditClick: (Category) -> Unit
+    private var items: List<Category>,
+    private val onEditClick: (Category) -> Unit,
+    private val onLongClick: ((Category) -> Unit)? = null
 ) : RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: ItemCategoryBinding) :
@@ -28,8 +29,17 @@ class CategoryAdapter(
             viewCategoryColour.backgroundTintList =
                 android.content.res.ColorStateList.valueOf(item.color)
             btnEdit.setOnClickListener { onEditClick(item) }
+            root.setOnLongClickListener {
+                onLongClick?.invoke(item)
+                true
+            }
         }
     }
 
     override fun getItemCount(): Int = items.size
+
+    fun updateCategories(newItems: List<Category>) {
+        items = newItems
+        notifyDataSetChanged()
+    }
 }
