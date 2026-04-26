@@ -46,7 +46,7 @@ jobs:
       # Step 5: Run the JVM unit tests (src/test). Instrumented tests (src/androidTest)
       # require a connected device or emulator and are run separately.
       - name: Run unit tests
-        run: ./gradlew test
+        run: ./gradlew :app:testDebugUnitTest
 
       # Step 6: Compile and package the debug variant of the APK.
       - name: Build debug APK
