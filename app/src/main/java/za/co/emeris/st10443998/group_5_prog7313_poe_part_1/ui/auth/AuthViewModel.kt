@@ -3,6 +3,7 @@ package za.co.emeris.st10443998.group_5_prog7313_poe_part_1.ui.auth
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.data.entity.CategoryEntity
 import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.data.entity.UserEntity
 import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.data.repository.StashRepository
 import java.security.MessageDigest
@@ -68,8 +69,20 @@ class AuthViewModel(private val repository: StashRepository) : ViewModel() {
             email = email,
             passwordHash = hashPassword(password)
         )
-        repository.insertUser(user)
-        Log.d(TAG, "registerUser: success for username=$username")
+        val newUserId = repository.insertUser(user).toInt()
+        Log.d(TAG, "registerUser: success for username=$username, userId=$newUserId, seeding default categories")
+
+        listOf(
+            "Groceries"     to "#4CAF50",
+            "Transport"     to "#2196F3",
+            "Entertainment" to "#9C27B0",
+            "Eating Out"    to "#FF9800",
+            "Health"        to "#F44336",
+            "Other"         to "#607D8B"
+        ).forEach { (name, hex) ->
+            repository.insertCategory(CategoryEntity(name = name, colorHex = hex, userId = newUserId))
+        }
+
         return AuthResult.Success
     }
 
