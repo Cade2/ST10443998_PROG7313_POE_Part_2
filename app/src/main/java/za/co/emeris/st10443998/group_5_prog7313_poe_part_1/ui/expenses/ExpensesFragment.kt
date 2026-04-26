@@ -26,6 +26,8 @@ import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.model.CategoryProgres
 import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.model.Expense
 import java.util.Calendar
 
+// ST10318188 - Ronald Fell - Add Expense Feature with Photo Attachment
+
 class ExpensesFragment : Fragment() {
 
     private var _binding: FragmentExpensesBinding? = null

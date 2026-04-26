@@ -6,6 +6,8 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.databinding.ActivityMainBinding
 
+// ST10318188 - Ronald Fell
+
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
