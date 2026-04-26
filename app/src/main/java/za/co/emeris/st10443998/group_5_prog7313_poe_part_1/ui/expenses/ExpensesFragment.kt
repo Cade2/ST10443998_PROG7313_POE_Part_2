@@ -24,7 +24,6 @@ import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.data.repository.Stash
 import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.databinding.FragmentExpensesBinding
 import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.model.CategoryProgress
 import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.model.Expense
-import java.io.File
 import java.util.Calendar
 
 class ExpensesFragment : Fragment() {
@@ -83,7 +82,7 @@ class ExpensesFragment : Fragment() {
         // Category map is shared by both the expense list and the totals computation.
         viewModel.getCategoriesForUser(userId).observe(viewLifecycleOwner) { cats ->
             categoryMap = cats.associateBy { it.id }
-            rebuildExpenseDisplay()
+            if (currentEntities.isNotEmpty()) rebuildExpenseDisplay()
         }
 
         // Start with all expenses and all-time totals.
@@ -94,6 +93,10 @@ class ExpensesFragment : Fragment() {
 
         binding.etEndDate.setOnClickListener { pickDate { date -> binding.etEndDate.setText(date); applyFilter() } }
         binding.tilEndDate.setEndIconOnClickListener { pickDate { date -> binding.etEndDate.setText(date); applyFilter() } }
+
+        binding.btnSettings.setOnClickListener {
+            findNavController().navigate(R.id.action_expenses_to_settings)
+        }
 
         binding.fabAddExpense.setOnClickListener {
             findNavController().navigate(R.id.action_expenses_to_addExpense)
@@ -134,7 +137,7 @@ class ExpensesFragment : Fragment() {
         currentExpenseObserver?.let { currentExpenseLiveData?.removeObserver(it) }
         val observer = Observer<List<ExpenseEntity>> { entities ->
             currentEntities = entities ?: emptyList()
-            rebuildExpenseDisplay()
+            if (categoryMap.isNotEmpty()) rebuildExpenseDisplay()
         }
         currentExpenseObserver = observer
         currentExpenseLiveData = newLiveData
@@ -173,29 +176,67 @@ class ExpensesFragment : Fragment() {
         val entity = currentEntities.find { it.id == expense.id } ?: return
         val photoPath = entity.photoPath
 
-        if (photoPath != null && File(photoPath).exists()) {
-            val imageView = ImageView(requireContext()).apply {
-                val bmp = BitmapFactory.decodeFile(photoPath)
-                setImageBitmap(bmp)
-                adjustViewBounds = true
-                scaleType = ImageView.ScaleType.CENTER_CROP
-            }
-            AlertDialog.Builder(requireContext())
-                .setTitle(expense.description)
-                .setView(imageView)
-                .setPositiveButton(android.R.string.ok, null)
-                .show()
-        } else {
-            AlertDialog.Builder(requireContext())
-                .setTitle(expense.description)
-                .setMessage(
-                    "${expense.category}\n" +
-                    "R%.2f".format(expense.amount) + "\n" +
-                    expense.date
-                )
-                .setPositiveButton(android.R.string.ok, null)
-                .show()
+        val bitmap = if (photoPath != null) {
+            runCatching {
+                if (photoPath.startsWith("content://")) {
+                    val uri = android.net.Uri.parse(photoPath)
+                    requireContext().contentResolver.openInputStream(uri)?.use { stream ->
+                        BitmapFactory.decodeStream(stream)
+                    }
+                } else {
+                    BitmapFactory.decodeFile(photoPath)
+                }
+            }.getOrNull()
+        } else null
+
+        val ctx = requireContext()
+        val padding = (24 * ctx.resources.displayMetrics.density).toInt()
+
+        val layout = android.widget.LinearLayout(ctx).apply {
+            orientation = android.widget.LinearLayout.VERTICAL
+            setPadding(padding, padding, padding, padding)
         }
+
+        val tvCategory = android.widget.TextView(ctx).apply {
+            text = expense.category
+            textSize = 14f
+            setTextColor(android.graphics.Color.parseColor("#616161"))
+        }
+        val tvAmount = android.widget.TextView(ctx).apply {
+            text = java.lang.String.format(java.util.Locale.US, "R%,.2f", expense.amount)
+            textSize = 18f
+            setTypeface(null, android.graphics.Typeface.BOLD)
+            setTextColor(android.graphics.Color.parseColor("#1B2A4A"))
+            setPadding(0, (4 * ctx.resources.displayMetrics.density).toInt(), 0, 0)
+        }
+        val tvDate = android.widget.TextView(ctx).apply {
+            text = expense.date
+            textSize = 14f
+            setTextColor(android.graphics.Color.parseColor("#616161"))
+            setPadding(0, (4 * ctx.resources.displayMetrics.density).toInt(), 0, 0)
+        }
+        val ivPhoto = ImageView(ctx).apply {
+            visibility = View.GONE
+            adjustViewBounds = true
+            scaleType = ImageView.ScaleType.CENTER_CROP
+            setPadding(0, (12 * ctx.resources.displayMetrics.density).toInt(), 0, 0)
+        }
+
+        layout.addView(tvCategory)
+        layout.addView(tvAmount)
+        layout.addView(tvDate)
+        layout.addView(ivPhoto)
+
+        if (bitmap != null) {
+            ivPhoto.setImageBitmap(bitmap)
+            ivPhoto.visibility = View.VISIBLE
+        }
+
+        AlertDialog.Builder(ctx)
+            .setTitle(expense.description)
+            .setView(layout)
+            .setPositiveButton(android.R.string.ok, null)
+            .show()
     }
 
     override fun onDestroyView() {

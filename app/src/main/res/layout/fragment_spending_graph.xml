@@ -89,6 +89,15 @@
                     android:orientation="vertical"
                     android:padding="@dimen/spacing_md">
 
+                    <TextView
+                        android:id="@+id/tv_chart_subtitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Daily Spending Totals"
+                        android:textSize="@dimen/text_md"
+                        android:textColor="@color/colorTextSecondary"
+                        android:layout_marginBottom="@dimen/spacing_sm" />
+
                     <com.github.mikephil.charting.charts.BarChart
                         android:id="@+id/bar_chart"
                         android:layout_width="match_parent"
@@ -116,57 +125,6 @@
                     android:gravity="center" />
             </LinearLayout>
 
-            <!-- Legend header -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/label_legend"
-                android:textSize="@dimen/text_body"
-                android:textStyle="bold"
-                android:textColor="@color/colorOnSurface"
-                android:layout_marginBottom="@dimen/spacing_sm" />
-
-            <!-- Legend items -->
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/colorSurface"
-                app:cardCornerRadius="@dimen/card_corner_radius"
-                app:cardElevation="2dp">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="@dimen/spacing_md">
-
-                    <!-- Groceries -->
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="@dimen/spacing_sm">
-                        <View android:layout_width="@dimen/category_dot_size" android:layout_height="@dimen/category_dot_size" android:background="@drawable/bg_circle" android:backgroundTint="@color/categoryGroceries" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/category_groceries" android:textColor="@color/colorOnSurface" android:textSize="@dimen/text_md" android:layout_marginStart="@dimen/spacing_sm" />
-                    </LinearLayout>
-                    <!-- Transport -->
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="@dimen/spacing_sm">
-                        <View android:layout_width="@dimen/category_dot_size" android:layout_height="@dimen/category_dot_size" android:background="@drawable/bg_circle" android:backgroundTint="@color/categoryTransport" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/category_transport" android:textColor="@color/colorOnSurface" android:textSize="@dimen/text_md" android:layout_marginStart="@dimen/spacing_sm" />
-                    </LinearLayout>
-                    <!-- Entertainment -->
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="@dimen/spacing_sm">
-                        <View android:layout_width="@dimen/category_dot_size" android:layout_height="@dimen/category_dot_size" android:background="@drawable/bg_circle" android:backgroundTint="@color/categoryEntertainment" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/category_entertainment" android:textColor="@color/colorOnSurface" android:textSize="@dimen/text_md" android:layout_marginStart="@dimen/spacing_sm" />
-                    </LinearLayout>
-                    <!-- Utilities -->
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical" android:layout_marginBottom="@dimen/spacing_sm">
-                        <View android:layout_width="@dimen/category_dot_size" android:layout_height="@dimen/category_dot_size" android:background="@drawable/bg_circle" android:backgroundTint="@color/categoryUtilities" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/category_utilities" android:textColor="@color/colorOnSurface" android:textSize="@dimen/text_md" android:layout_marginStart="@dimen/spacing_sm" />
-                    </LinearLayout>
-                    <!-- Dining -->
-                    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="horizontal" android:gravity="center_vertical">
-                        <View android:layout_width="@dimen/category_dot_size" android:layout_height="@dimen/category_dot_size" android:background="@drawable/bg_circle" android:backgroundTint="@color/categoryDining" />
-                        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/category_dining" android:textColor="@color/colorOnSurface" android:textSize="@dimen/text_md" android:layout_marginStart="@dimen/spacing_sm" />
-                    </LinearLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
 
         </LinearLayout>
     </ScrollView>

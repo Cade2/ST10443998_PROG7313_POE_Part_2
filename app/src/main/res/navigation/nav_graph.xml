@@ -26,6 +26,9 @@
         <action
             android:id="@+id/action_expenses_to_addExpense"
             app:destination="@id/addExpenseFragment" />
+        <action
+            android:id="@+id/action_expenses_to_settings"
+            app:destination="@id/settingsFragment" />
     </fragment>
 
     <fragment
@@ -36,6 +39,9 @@
         <action
             android:id="@+id/action_budget_to_categories"
             app:destination="@id/categoriesFragment" />
+        <action
+            android:id="@+id/action_budget_to_settings"
+            app:destination="@id/settingsFragment" />
     </fragment>
 
     <fragment

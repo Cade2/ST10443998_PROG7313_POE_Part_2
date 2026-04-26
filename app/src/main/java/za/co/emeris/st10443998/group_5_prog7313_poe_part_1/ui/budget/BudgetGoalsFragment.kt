@@ -71,6 +71,10 @@ class BudgetGoalsFragment : Fragment() {
             goalAdapter.updateGoals(items)
         }
 
+        binding.btnSettings.setOnClickListener {
+            findNavController().navigate(R.id.action_budget_to_settings)
+        }
+
         binding.btnManageCategories.setOnClickListener {
             findNavController().navigate(R.id.action_budget_to_categories)
         }

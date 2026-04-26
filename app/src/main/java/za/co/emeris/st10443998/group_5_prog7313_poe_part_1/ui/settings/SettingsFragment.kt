@@ -9,9 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.AuthActivity
 import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.R
+import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.data.repository.StashRepository
 import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.databinding.FragmentSettingsBinding
 
 class SettingsFragment : Fragment() {
@@ -29,6 +33,21 @@ class SettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val prefs = requireContext().getSharedPreferences("stash_prefs", Context.MODE_PRIVATE)
+        val userId = prefs.getInt("userId", -1)
+        val username = prefs.getString("username", "") ?: ""
+
+        binding.tvUsername.text = username.ifEmpty { "User" }
+        binding.tvAvatarInitials.text = username.firstOrNull()?.uppercaseChar()?.toString() ?: "U"
+
+        if (username.isNotEmpty()) {
+            val repository = StashRepository.getInstance(requireContext())
+            lifecycleScope.launch(Dispatchers.Main) {
+                val user = repository.getUserByUsername(username)
+                binding.tvEmail.text = user?.email ?: ""
+            }
+        }
 
         binding.toolbar.setNavigationOnClickListener {
             findNavController().navigateUp()

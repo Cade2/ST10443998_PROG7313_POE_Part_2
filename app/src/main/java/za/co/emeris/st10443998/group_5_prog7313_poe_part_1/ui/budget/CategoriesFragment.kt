@@ -39,15 +39,6 @@ class CategoriesFragment : Fragment() {
         "#4CAF50", "#2196F3", "#9C27B0", "#FF9800", "#F44336", "#607D8B"
     )
 
-    private val defaultCategories = listOf(
-        "Groceries" to "#4CAF50",
-        "Transport" to "#2196F3",
-        "Entertainment" to "#9C27B0",
-        "Eating Out" to "#FF9800",
-        "Health" to "#F44336",
-        "Other" to "#607D8B"
-    )
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -85,32 +76,20 @@ class CategoriesFragment : Fragment() {
 
         viewModel.getCategories(userId).observe(viewLifecycleOwner) { entities ->
             currentEntities = entities
-            if (entities.isEmpty()) {
-                seedDefaults()
-            } else {
-                val display = entities.map { entity ->
-                    Category(
-                        id = entity.id,
-                        name = entity.name,
-                        colorResId = 0,
-                        color = runCatching { Color.parseColor(entity.colorHex) }.getOrElse { Color.GRAY }
-                    )
-                }
-                adapter.updateCategories(display)
+            val display = entities.map { entity ->
+                Category(
+                    id = entity.id,
+                    name = entity.name,
+                    colorResId = 0,
+                    color = runCatching { Color.parseColor(entity.colorHex) }.getOrElse { Color.GRAY }
+                )
             }
+            adapter.updateCategories(display)
         }
 
         binding.toolbar.setNavigationOnClickListener { findNavController().navigateUp() }
 
         binding.fabAddCategory.setOnClickListener { showCategoryBottomSheet(null) }
-    }
-
-    private fun seedDefaults() {
-        lifecycleScope.launch(Dispatchers.Main) {
-            defaultCategories.forEach { (name, hex) ->
-                viewModel.addCategory(name, hex, userId)
-            }
-        }
     }
 
     private fun showCategoryBottomSheet(existing: CategoryEntity?) {
