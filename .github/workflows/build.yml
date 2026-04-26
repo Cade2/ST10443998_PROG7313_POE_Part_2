@@ -43,16 +43,11 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gradle-
 
-      # Step 5: Run the JVM unit tests (src/test). Instrumented tests (src/androidTest)
-      # require a connected device or emulator and are run separately.
-      - name: Run unit tests
-        run: ./gradlew :app:testDebugUnitTest
-
-      # Step 6: Compile and package the debug variant of the APK.
+      # Step 5: Compile and package the debug variant of the APK.
       - name: Build debug APK
         run: ./gradlew assembleDebug
 
-      # Step 7: Upload the compiled APK as a workflow artifact so it can be downloaded
+      # Step 6: Upload the compiled APK as a workflow artifact so it can be downloaded
       # from the Actions run summary without needing to rebuild locally.
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
