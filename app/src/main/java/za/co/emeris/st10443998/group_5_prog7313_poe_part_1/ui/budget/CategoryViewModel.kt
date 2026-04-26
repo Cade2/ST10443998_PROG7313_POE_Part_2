@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModelProvider
 import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.data.entity.CategoryEntity
 import za.co.emeris.st10443998.group_5_prog7313_poe_part_1.data.repository.StashRepository
 
-// ST10318188 - Ronald Fell 
 /**
  * ViewModel for [CategoriesFragment].
  * Exposes CRUD operations for user-owned spending categories.
