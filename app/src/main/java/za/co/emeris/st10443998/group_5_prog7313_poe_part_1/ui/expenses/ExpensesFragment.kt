@@ -2,6 +2,9 @@ package za.co.emeris.st10443998.group_5_prog7313_poe_part_1.ui.expenses
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -28,6 +31,10 @@ import java.util.Calendar
 
 class ExpensesFragment : Fragment() {
 
+    companion object {
+        private const val TAG = "ExpensesFragment"
+    }
+
     private var _binding: FragmentExpensesBinding? = null
     private val binding get() = _binding!!
 
@@ -37,6 +44,7 @@ class ExpensesFragment : Fragment() {
 
     private var categoryMap: Map<Int, CategoryEntity> = emptyMap()
     private var currentEntities: List<ExpenseEntity> = emptyList()
+    private var currentSearchQuery: String = ""
 
     // Tracked LiveData + observer pairs so old observers are removed before re-subscribing.
     private var currentExpenseLiveData: LiveData<List<ExpenseEntity>>? = null
@@ -61,6 +69,7 @@ class ExpensesFragment : Fragment() {
         userId = requireContext()
             .getSharedPreferences("stash_prefs", Context.MODE_PRIVATE)
             .getInt("userId", -1)
+        Log.d(TAG, "onViewCreated: userId=$userId")
 
         val repository = StashRepository.getInstance(requireContext())
         viewModel = ViewModelProvider(this, ExpensesViewModel.Factory(repository))[ExpensesViewModel::class.java]
@@ -82,6 +91,7 @@ class ExpensesFragment : Fragment() {
         // Category map is shared by both the expense list and the totals computation.
         viewModel.getCategoriesForUser(userId).observe(viewLifecycleOwner) { cats ->
             categoryMap = cats.associateBy { it.id }
+            Log.d(TAG, "categories loaded: ${cats.size}")
             if (currentEntities.isNotEmpty()) rebuildExpenseDisplay()
         }
 
@@ -101,6 +111,15 @@ class ExpensesFragment : Fragment() {
         binding.fabAddExpense.setOnClickListener {
             findNavController().navigate(R.id.action_expenses_to_addExpense)
         }
+
+        binding.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun afterTextChanged(s: Editable?) {
+                currentSearchQuery = s?.toString()?.trim() ?: ""
+                if (categoryMap.isNotEmpty()) rebuildExpenseDisplay()
+            }
+        })
     }
 
     private fun pickDate(onPicked: (String) -> Unit) {
@@ -115,6 +134,7 @@ class ExpensesFragment : Fragment() {
     private fun applyFilter() {
         val start = binding.etStartDate.text?.toString()?.trim() ?: ""
         val end = binding.etEndDate.text?.toString()?.trim() ?: ""
+        Log.d(TAG, "applyFilter: start=$start, end=$end")
         if (start.isNotEmpty() && end.isNotEmpty()) {
             observeFiltered(start, end)
         } else {
@@ -124,11 +144,13 @@ class ExpensesFragment : Fragment() {
 
     // "All time" uses a span wide enough to capture every possible date stored as yyyy-MM-dd.
     private fun observeAllExpenses() {
+        Log.d(TAG, "observeAllExpenses: userId=$userId")
         swapExpenseObserver(viewModel.getAllExpenses(userId))
         swapTotalsObserver(viewModel.getCategoryTotalsForPeriod(userId, "0001-01-01", "9999-12-31"))
     }
 
     private fun observeFiltered(start: String, end: String) {
+        Log.d(TAG, "observeFiltered: start=$start, end=$end")
         swapExpenseObserver(viewModel.getExpensesByDateRange(userId, start, end))
         swapTotalsObserver(viewModel.getCategoryTotalsForPeriod(userId, start, end))
     }
@@ -137,6 +159,7 @@ class ExpensesFragment : Fragment() {
         currentExpenseObserver?.let { currentExpenseLiveData?.removeObserver(it) }
         val observer = Observer<List<ExpenseEntity>> { entities ->
             currentEntities = entities ?: emptyList()
+            Log.d(TAG, "expenses updated: ${currentEntities.size} items")
             if (categoryMap.isNotEmpty()) rebuildExpenseDisplay()
         }
         currentExpenseObserver = observer
@@ -155,6 +178,7 @@ class ExpensesFragment : Fragment() {
     }
 
     private fun rebuildExpenseDisplay() {
+        Log.d(TAG, "rebuildExpenseDisplay: ${currentEntities.size} expenses, ${categoryMap.size} categories")
         val expenses = currentEntities.map { entity ->
             val cat = categoryMap[entity.categoryId]
             Expense(
@@ -169,10 +193,16 @@ class ExpensesFragment : Fragment() {
                 hasPhoto = entity.photoPath != null
             )
         }
-        expenseAdapter.updateExpenses(expenses)
+        val filtered = if (currentSearchQuery.isEmpty()) {
+            expenses
+        } else {
+            expenses.filter { it.description.contains(currentSearchQuery, ignoreCase = true) }
+        }
+        expenseAdapter.updateExpenses(filtered)
     }
 
     private fun showExpenseDetail(expense: Expense) {
+        Log.d(TAG, "showExpenseDetail: id=${expense.id}, description=${expense.description}")
         val entity = currentEntities.find { it.id == expense.id } ?: return
         val photoPath = entity.photoPath
 
